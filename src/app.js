@@ -1,35 +1,41 @@
 const express = require('express');
 const morgan = require('morgan');
 
-require('dotenv').config();
+const dotenv = require('dotenv');
 
+dotenv.config();
 const app = express();
+require('../utils/proc-man');
 
 const path = require('path');
 const { ErrorFactory } = require('../utils/errorFactory');
 
-// const adminRouter = require('../components/admin/adminRouter');
+const { apiRouter } = require('../components/api');
+const { authRouter } = require('../components/auth');
 
 app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(`${__dirname}/index.html`));
+  res.sendFile(path.join(`${__dirname}/index.html`));
 });
 
-// app.use('/api/v1/admin', adminRouter);
+app.use('/auth', authRouter);
+app.use('/api/v1', apiRouter);
 
 app.use((req, res, next) => next(new ErrorFactory(404, 'The requested resource is not found')));
 
+// eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
-    res.status(error.status);
-    res.json({
-        error: {
-            status: error.status,
-            name: error.name,
-            message: error.message,
-        },
-    });
+  error.status = error.status || 500;
+  res.status(error.status);
+  res.json({
+    error: {
+      status: error.status,
+      name: error.name,
+      message: error.message,
+    },
+  });
 });
 
 module.exports = app;
