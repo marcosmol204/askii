@@ -30,7 +30,8 @@ const postQuestion = async (req, res, next) => {
 const deleteQuestion = async (req, res, next) => {
   try {
     const { questionId } = req.params;
-    const question = await removeQuestion(questionId);
+    const deletedBy = req.sub;
+    const question = await removeQuestion(questionId, deletedBy);
     res.json({
       status: '200',
       message: 'The question was successfully created',
@@ -99,7 +100,8 @@ const postAnswer = async (req, res, next) => {
 const deleteAnswer = async (req, res, next) => {
   try {
     const { answerId } = req.params;
-    const answer = await removeAnswer(answerId);
+    const deletedBy = req.sub;
+    const answer = await removeAnswer(answerId, deletedBy);
     res.json({
       status: '200',
       message: 'The question was successfully created',

@@ -20,6 +20,8 @@ function ErrorFactory(type, message = null) {
       return new AppError(message, 404, 'Not Found');
     case 500:
       return new AppError(message, 500, 'Internal Server Error');
+    case 403:
+      return new AppError(message, 403, 'Forbidden');
     default:
       return null;
   }

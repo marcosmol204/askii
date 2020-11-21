@@ -2,7 +2,7 @@ const {
   readQuestion, createQuestion, readAnswers, createAnswer, readAnswer, readQuestions,
 } = require('./apiDA');
 
-const { authAPI } = require('../auth');
+const { ErrorFactory } = require('../../utils/errorFactory');
 
 const recordQuestion = async (schema) => {
   const status = 0; // ACTIVE
@@ -10,12 +10,12 @@ const recordQuestion = async (schema) => {
   return questionDoc.save();
 };
 
-const removeQuestion = async (id) => {
-  // validate if is own question
-  const cond = { _id: id };
-  // const opts = {};
-  // const proj = {};
+const removeQuestion = async (questionId, deletedBy) => {
+  const cond = { _id: questionId };
   const questionDoc = await readQuestion(cond);
+  if (questionDoc.askedBy.toString() !== deletedBy) {
+    throw (new ErrorFactory(403, 'Attempt to delete a question not asked by the applicant'));
+  }
   return questionDoc.remove();
 };
 
@@ -50,10 +50,13 @@ const recordAnswer = async (schema) => {
   return answerDoc.save();
 };
 
-const removeAnswer = async (id) => {
+const removeAnswer = async (answerId, deletedBy) => {
   // validate if is own answer
-  const cond = { _id: id };
+  const cond = { _id: answerId };
   const answerDoc = await readAnswer(cond);
+  if (answerDoc.answeredBy.toString() !== deletedBy) {
+    throw (new ErrorFactory(403, 'Attempt to delete an answer not answered by the applicant'));
+  }
   return answerDoc.remove();
 };
 
