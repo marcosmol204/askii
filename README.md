@@ -11,11 +11,7 @@ RESTful API
 Auth-- Layered arch.  
 Stateless. JWT accesss token and refesh token.  
 API-- Layered arch. 
-
-## Database
-![Database Model](assets/Database models.png)  
-
-### Version 1.0.0
+## Version 1.0.0
 -- AUTH  
 *As a user I can log-in  
 *As a user I can refresh tokens  
@@ -35,7 +31,7 @@ Next version(1.1.0)
 As a user I can edit a question.
 As a user I can edit an answer.
 More
-#### API
+### API
 -- AUTH
 POST /auth/log-in  
 POST /auth/refresh-token  
@@ -49,5 +45,6 @@ DELETE /api/v1/answer/{answer-id}
 GET /api/v1/answers/question/{question-id}
 GET /api/v1/questions
 GET /api/v1/answers
-
+#### Database
+![](assets/Database_models.png)  
 
