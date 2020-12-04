@@ -9,7 +9,7 @@ Redis
 Modular monolith  
 RESTful API  
 ## Data base
-[Click](https://i.ibb.co/W2YnDkV/Generic-API.png)  
+[Click](https://ibb.co/W2YnDkV)  
 
 ### Version
 1.0.0  
@@ -22,3 +22,4 @@ As a user I can search tasks by input.
 #### View
 ![](https://i.ibb.co/R3SNwf7/Todo.png)  
 
+<a href="https://ibb.co/W2YnDkV"><img src="https://i.ibb.co/W2YnDkV/Generic-API.png" alt="Generic-API" border="0"></a>
