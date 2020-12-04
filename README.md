@@ -13,7 +13,8 @@ Stateless. JWT accesss token and refesh token.
 API-- Layered arch. 
 
 ## Database
-![DB](/assets/Database models.png)  
+![Database Model](assets/Database models.png)  
+
 ### Version 1.0.0
 -- AUTH  
 *As a user I can log-in  
