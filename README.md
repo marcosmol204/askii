@@ -9,7 +9,7 @@ Redis
 Modular monolith  
 RESTful API  
 Auth-- Layered arch.  
-Stateless. JWT accesss token and refesh token.
+Stateless. JWT accesss token and refesh token.  
 API-- Layered arch. 
 
 ## Database
