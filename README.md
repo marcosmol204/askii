@@ -7,8 +7,11 @@ MongoDB
 Redis
 ## Software Architecture  
 Modular monolith  
-RESTful API
-Layered
+RESTful API  
+Auth-- Layered arch.  
+Stateless. JWT accesss token and refesh token.
+API-- Layered arch. 
+
 ## Database
 ![DB](https://ibb.co/W2YnDkV)  
 ### Version 1.0.0
