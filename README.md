@@ -9,6 +9,7 @@ Redis
 Modular monolith  
 RESTful API  
 ## Data base
+![DB](https://ibb.co/W2YnDkV)  
 [Click](https://ibb.co/W2YnDkV)  
 
 ### Version
