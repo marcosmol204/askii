@@ -10,7 +10,6 @@ Modular monolith
 RESTful API  
 ## Data base
 ![DB](https://ibb.co/W2YnDkV)  
-[Click](https://ibb.co/W2YnDkV)  
 
 ### Version
 1.0.0  
