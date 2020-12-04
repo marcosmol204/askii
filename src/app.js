@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+var cors = require('cors')
 
 const dotenv = require('dotenv');
 
@@ -12,6 +13,8 @@ const { ErrorFactory } = require('../utils/errorFactory');
 
 const { apiRouter } = require('../components/api');
 const { authRouter } = require('../components/auth');
+
+app.use(cors())
 
 app.use(morgan('dev'));
 app.use(express.json());
