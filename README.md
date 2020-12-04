@@ -7,7 +7,8 @@ MongoDB
 Redis
 ## Software Architecture  
 Modular monolith  
-RESTful API  
+RESTful API
+Layered
 ## Database
 ![DB](https://ibb.co/W2YnDkV)  
 ### Version 1.0.0
@@ -15,7 +16,7 @@ RESTful API
 *As a user I can log-in  
 *As a user I can refresh tokens  
 *As a user I can log-out  
-*As a user I can register    
+*As a user I can create a new account    
 -- API  
 Questions  
 *As a user I can ask a question (also anonymously).  
