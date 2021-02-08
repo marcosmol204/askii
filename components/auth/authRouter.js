@@ -2,13 +2,16 @@ const { Router } = require('express');
 const {
   validate,
 } = require('../../utils/express-validator');
-const { loginSchema, userSchema, refreshToken } = require('./utils/authValidation');
+const {
+  loginSchema, userSchema, refreshToken, mail,
+} = require('./utils/authValidation');
 
 const {
   postLogin,
   postRefreshToken,
   deleteLogout,
   postRegister,
+  postNewPassword,
 } = require('./authController');
 
 const router = Router();
@@ -33,4 +36,14 @@ router.delete('/log-out',
   validate(refreshToken),
   deleteLogout);
 
+// As a user I can generate new password
+router.post('/new-password',
+  validate(mail),
+  postNewPassword);
+
 module.exports = router;
+
+// As a admin I can get statistics about users
+// router.get('/auth/statistics',
+//   validate(refreshToken),
+//   getStatistics);

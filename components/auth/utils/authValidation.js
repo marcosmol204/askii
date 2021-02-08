@@ -17,4 +17,8 @@ const refreshToken = [
   header('x-refresh-token').isJWT().withMessage('Valid JWT is requiered'),
 ];
 
-module.exports = { userSchema, loginSchema, refreshToken };
+const mail = [body('email').exists().withMessage('Email is required')];
+
+module.exports = {
+  userSchema, loginSchema, refreshToken, mail,
+};

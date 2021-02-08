@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const dotenv = require('dotenv');
 
@@ -14,8 +15,8 @@ const { ErrorFactory } = require('../utils/errorFactory');
 const { apiRouter } = require('../components/api');
 const { authRouter } = require('../components/auth');
 
-app.use(cors())
-
+app.use(cors());
+app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
 

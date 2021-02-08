@@ -12,9 +12,7 @@ const { ErrorFactory } = require('../../../utils/errorFactory');
 const comparePassword = async (user, password) => {
   try {
     const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      throw new ErrorFactory(400, 'Invalid credentials');
-    }
+    return match;
   } catch (error) {
     throw new ErrorFactory(500, error.message);
   }

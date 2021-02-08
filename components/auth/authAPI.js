@@ -1,5 +1,4 @@
 const { decodeToken } = require('./utils/jwt');
-
 /**
   * @type middleware
   * @desc checks if a user has authorization and add to the req the request sub
@@ -10,8 +9,8 @@ const { decodeToken } = require('./utils/jwt');
 
 const authorize = () => async (req, res, next) => {
   try {
-    const token = req.header('x-access-token');
-    const decodedToken = await decodeToken(token, 'access');
+    const { accessToken } = req.cookies;
+    const decodedToken = await decodeToken(accessToken, 'access');
     req.sub = decodedToken.sub;
     return next();
   } catch (error) {
