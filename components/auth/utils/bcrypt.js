@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { ErrorFactory } = require('../../../utils/errorFactory');
+const { ErrorFactory } = require('../../../utils/errors/errorFactory');
 
 /**
   * @type function

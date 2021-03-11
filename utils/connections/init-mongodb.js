@@ -29,6 +29,7 @@ module.exports = () => {
 
   process.on('SIGINT', async () => {
     await mongoose.connection.close();
+    // eslint-disable-next-line no-process-exit
     process.exit(0);
   });
 };

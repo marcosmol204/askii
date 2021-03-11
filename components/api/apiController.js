@@ -10,9 +10,9 @@ const {
 } = require('./apiBL');
 
 const postQuestion = async (req, res, next) => {
+  const schema = req.body;
+  const askedBy = req.sub;
   try {
-    const schema = req.body;
-    const askedBy = req.sub;
     const question = await recordQuestion({ askedBy, ...schema });
     res.json({
       status: '200',
@@ -159,39 +159,3 @@ module.exports = {
   getQuestions,
   getAnswers,
 };
-
-// const fetchQuestion = async (req, res, next) => {
-//   try {
-//     const schema = req.body;
-//     const { questionId } = req.params;
-//     const question = await editQuestion(questionId, schema);
-//     res.json({
-//       status: '200',
-//       message: 'The question was successfully created',
-//       responseTime: new Date(),
-//       data: {
-//         questionId: question._id,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const putAnswer = async (req, res, next) => {
-//   try {
-//     const { answerId } = req.params;
-//     const schema = req.body;
-//     const answer = await editAnswer(answerId, schema);
-//     res.json({
-//       status: '200',
-//       message: 'The question was successfully created',
-//       responseTime: new Date(),
-//       data: {
-//         answer,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };

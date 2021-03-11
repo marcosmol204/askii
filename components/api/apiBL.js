@@ -2,10 +2,14 @@ const {
   readQuestion, createQuestion, readAnswers, createAnswer, readAnswer, readQuestions,
 } = require('./apiDA');
 
-const { ErrorFactory } = require('../../utils/errorFactory');
+const { ErrorFactory } = require('../../utils/errors/errorFactory');
+const {
+  questionStatusEnum,
+  questionTypeEnum,
+} = require('../../models/question/questionConfigs');
 
 const recordQuestion = async (schema) => {
-  const status = 0; // ACTIVE
+  const status = questionStatusEnum.ACTIVE;
   const questionDoc = createQuestion({ status, ...schema });
   return questionDoc.save();
 };
@@ -83,21 +87,3 @@ module.exports = {
   queryQuestions,
   queryAnswers,
 };
-
-// const editQuestion = async (id, schema) => {
-//   const editSchema = { ...schema };
-//   delete editSchema.askedAt;
-//   const cond = { _id: id };
-//   // const opts = {};
-//   // const proj = {};
-//   const questionDoc = await readQuestion(cond);
-//   return questionDoc.updateOne(schema);
-// };
-
-// const editAnswer = async (id, schema) => {
-//   const cond = { _id: id };
-//   const proj = {};
-//   const options = {};
-//   const answerDoc = await readAnswer(cond, proj, options);
-//   return answerDoc.updateOne(schema);
-// };

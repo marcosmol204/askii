@@ -1,4 +1,4 @@
-const { ErrorFactory } = require('../../utils/errorFactory');
+const { ErrorFactory } = require('../../utils/errors/errorFactory');
 
 const saveErrorHandler = (error, doc, next) => {
   console.log('hook: post save(error');

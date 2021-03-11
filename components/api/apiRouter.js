@@ -1,19 +1,19 @@
 const { Router } = require('express');
-const { validate, questionSchema, answerSchema } = require('../../utils/express-validator');
+const { validate } = require('../../utils/express-validator');
+const { questionSchema, answerSchema } = require('./utils/apiValidations');
+
 const {
-  postQuestion,
-  deleteQuestion,
-  getQuestion,
-  getQuestionAnswers,
-  postAnswer,
-  deleteAnswer,
-  getQuestions,
-  getAnswers,
+  postQuestion, deleteQuestion,
+  getQuestion, getQuestionAnswers,
+  postAnswer, deleteAnswer,
+  getQuestions, getAnswers,
 } = require('./apiController');
+
 const { authAPI } = require('../auth');
 
 const router = Router();
 
+// Authorization middleware
 router.use(authAPI.authorize());
 
 // As a user I can ask a question (also anonymously).
@@ -22,7 +22,7 @@ router.post('/question',
   postQuestion);
 
 // As a user I can see all the question I asked.
-router.get('/questions/',
+router.get('/questions',
   getQuestions);
 
 // As a user I can see all the answers to a question I asked.

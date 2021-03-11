@@ -1,45 +1,32 @@
 const express = require('express');
-const morgan = require('morgan');
+const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const pino = require('pino-http')();
 
-const dotenv = require('dotenv');
+const { errorHandler, notFoundHandler } = require('../utils/errors/errorHandler');
 
-dotenv.config();
 const app = express();
-require('../utils/proc-man');
-
-const path = require('path');
-const { ErrorFactory } = require('../utils/errorFactory');
+dotenv.config();
+require('../utils/errors/proc-man')();
 
 const { apiRouter } = require('../components/api');
 const { authRouter } = require('../components/auth');
 
+app.use(pino);
 app.use(cors());
 app.use(cookieParser());
-app.use(morgan('dev'));
-app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/index.html`));
-});
+app.use(express.json());
+app.use(helmet());
 
 app.use('/auth', authRouter);
 app.use('/api/v1', apiRouter);
+app.use(notFoundHandler);
 
-app.use((req, res, next) => next(new ErrorFactory(404, 'The requested resource is not found')));
-
-// eslint-disable-next-line no-unused-vars
-app.use((error, req, res, next) => {
-  error.status = error.status || 500;
-  res.status(error.status);
-  res.json({
-    error: {
-      status: error.status,
-      name: error.name,
-      message: error.message,
-    },
-  });
+app.use(async (err, req, res, next) => {
+  await errorHandler(err, res);
 });
 
 module.exports = app;

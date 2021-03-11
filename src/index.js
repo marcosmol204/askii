@@ -1,8 +1,8 @@
 const app = require('./app');
-require('./init-mongodb')();
+require('../utils/connections/init-mongodb')();
 
-const port = process.env.PORT || 5000;
+const HTTPPort = process.env.HTTP_PORT || 5000;
 
-app.listen(port, () => {
-  console.log(`Listening: http://localhost:${port}`);
+app.listen(HTTPPort, () => {
+  console.log(`Listening: http://localhost:${HTTPPort}`);
 });

@@ -20,6 +20,7 @@ client.on('end', () => {
 
 process.on('SIGINT', () => {
   client.quit();
+  // eslint-disable-next-line no-process-exit
   process.exit(0);
 });
 

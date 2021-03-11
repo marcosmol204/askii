@@ -1,5 +1,5 @@
 const { promisify } = require('util');
-const client = require('../../../src/init-redis');
+const client = require('../../../utils/connections/init-redis');
 
 // Redis package doesnt support promises out the box
 const asyncGET = promisify(client.GET).bind(client);

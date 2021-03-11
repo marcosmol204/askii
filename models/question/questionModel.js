@@ -4,32 +4,31 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const {
   requiredString,
-  requiredDate,
+  requiredNumber,
   requiredBool,
+} = require('../globalConfigs');
+
+const {
   requiredQuestionStatus,
   requiredQuestionType,
-} = require('../configs');
-
+  questionStatusEnum,
+} = require('./questionConfigs');
 const { saveErrorHandler } = require('./questionUtil');
 
 const QuestionSchema = new Schema({
   askedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-  answeredBy: { type: [mongoose.Schema.Types.ObjectId], ref: 'user', default: [] },
-  askedAt: requiredDate,
+  askedAt: requiredNumber,
   question: requiredString,
   description: String,
-  duration: {
-    type: Number, required: true, min: 1, max: 30,
-  },
+  expirationTime: requiredNumber,
   isAnonymous: requiredBool,
-  status: requiredQuestionStatus,
-  type: requiredQuestionType,
+  status: { ...requiredQuestionStatus },
+  type: { ...requiredQuestionType, default: questionStatusEnum.ACTIVE },
   tags: { type: [String], ref: 'user', default: [] },
 });
 
-QuestionSchema.virtual('expirationDate').get(function () {
-  const dayInMilliseconds = 86400000;
-  return this.askedAt + (this.duration * dayInMilliseconds);
+QuestionSchema.virtual('isExpired').get(function () {
+  return this.expirationTime - this.askedAt >= 0;
 });
 
 QuestionSchema.post('save', saveErrorHandler);

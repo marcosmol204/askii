@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const Question = require('../question/questionModel');
 const {
-  requiredDate,
+  requiredNumber,
   requiredBool,
   requieredMixed,
-} = require('../configs');
+} = require('../globalConfigs');
+
 const {
   validateType,
   validateDate,
@@ -23,7 +24,7 @@ const AnswerSchema = new Schema({
   isAnonymous: requiredBool,
   answer: requieredMixed,
   explanation: String,
-  answeredAt: requiredDate,
+  answeredAt: requiredNumber,
 });
 
 AnswerSchema.pre('save', async function (next) {
@@ -46,7 +47,6 @@ AnswerSchema.post('save', async function (next) {
 AnswerSchema.post('save', saveErrorHandler);
 
 AnswerSchema.pre('remove', async function (next) {
-  const Question = require('../questionModel');
   const questionDoc = await Question.findOne({ _id: this.questionId });
   questionDoc.answeredBy.pull(this.answeredBy);
   questionDoc.save();

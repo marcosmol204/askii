@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ErrorFactory } = require('../../utils/errorFactory');
+const { ErrorFactory } = require('../../utils/errors/errorFactory');
 
 const validateType = (type, answer) => {
   if (type === 0 && typeof answer !== 'boolean') {

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { ErrorFactory } = require('../../../utils/errorFactory');
+const { ErrorFactory } = require('../../../utils/errors/errorFactory');
 
 const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = process.env;
 

@@ -12,7 +12,8 @@ const {
   redisSETWithEX,
   redisTTL,
 } = require('./utils/redis');
-const { ErrorFactory } = require('../../utils/errorFactory');
+
+const { ErrorFactory } = require('../../utils/errors/errorFactory');
 
 const issueTokens = async (loginSchema) => {
   const { email, password } = loginSchema;
@@ -56,7 +57,7 @@ const refreshTokens = async (refreshToken) => {
 
   const accessToken = await createToken('24h', sub, 'access');
   const refreshRoken = await createToken('1y', sub, 'refresh');
-  await redisSET(sub, refreshRoken);
+  await redisSET(`refresh_token:${sub}`, refreshRoken);
 
   const tokens = {
     accessToken,
@@ -67,7 +68,7 @@ const refreshTokens = async (refreshToken) => {
 
 const removeRefreshToken = async (refreshToken) => {
   const { sub } = await decodeToken(refreshToken, 'refresh');
-  const deletedAmount = await redisDEL(sub);
+  const deletedAmount = await redisDEL(`refresh_token:${sub}`);
   if (deletedAmount < 1) {
     throw new ErrorFactory(400, 'User is already logged out');
   }

@@ -5,81 +5,49 @@ const {
   removeRefreshToken,
   generatePassword,
 } = require('./authBL');
+const Response = require('../../utils/Response');
 
 const postLogin = async (req, res, next) => {
   const loginSchema = req.body;
-  try {
-    const tokens = await issueTokens(loginSchema);
+  const tokens = await issueTokens(loginSchema).catch((error) => next(error));
+  if (tokens) {
     res.setHeader('set-cookie', [`accessToken=${tokens.accessToken}; httponly; samesite=lax; path=/`]);
-    return res.json({
-      status: '200',
-      message: 'Operation successful',
-      responseTime: new Date(),
-      data: { refeshToken: tokens.refreshRoken },
-    });
-  } catch (error) {
-    return next(error);
+    return res.json(new Response({ refeshToken: tokens.refreshRoken }));
   }
 };
 
 const postRefreshToken = async (req, res, next) => {
   const refreshToken = req.header('x-refresh-token');
-  try {
-    const tokens = await refreshTokens(refreshToken);
-    return res.json({
-      status: '200',
-      message: 'Operation successful',
-      responseTime: new Date(),
-      data: { tokens },
-    });
-  } catch (error) {
-    return next(error);
+  const tokens = await refreshTokens(refreshToken).catch((error) => next(error));
+  if (tokens) {
+    res.setHeader('set-cookie', [`accessToken=${tokens.accessToken}; httponly; samesite=lax; path=/`]);
+    return res.json(new Response({ tokens }));
   }
 };
 
 const deleteLogout = async (req, res, next) => {
   const refreshToken = req.header('x-refresh-token');
-  try {
-    await removeRefreshToken(refreshToken);
+  const prom = await removeRefreshToken(refreshToken).catch((error) => next(error));
+  if (prom) {
     res.clearCookie('accessToken');
-    return res.json({
-      status: '200',
-      message: 'Operation successful',
-      response_time: new Date(),
-      data: null,
-    });
-  } catch (error) {
-    return next(error);
+    return res.json(new Response());
   }
 };
 
 const postRegister = async (req, res, next) => {
   const userSchema = req.body;
-  try {
-    const userDoc = await recordUser(userSchema);
-    return res.json({
-      status: '200',
-      message: 'Operation successful',
-      response_time: new Date(),
-      data: { _id: userDoc._id },
-    });
-  } catch (error) {
-    return next(error);
+  const userDoc = await recordUser(userSchema).catch((error) => next(error));
+  if (userDoc) {
+    return res.json(new Response({ _id: userDoc._id }));
   }
 };
 
+// improve mail experience
 const postNewPassword = async (req, res, next) => {
   const { email } = req.body;
-  try {
-    const userDoc = await generatePassword(email);
-    return res.json({
-      status: '200',
-      message: 'Operation successful',
-      response_time: new Date(),
-      data: null,
-    });
-  } catch (error) {
-    return next(error);
+  const info = await generatePassword(email).catch((error) => next(error));
+  if (info) {
+    return res.json(new Response());
   }
 };
 
@@ -90,17 +58,3 @@ module.exports = {
   postRegister,
   postNewPassword,
 };
-
-// const getStatistics = async (req, res, next) => {
-//   try {
-//     const statistics = await issueStatistics();
-//     return res.json({
-//       status: '200',
-//       message: 'Operation successful',
-//       response_time: new Date(),
-//       data: statistics,
-//     });
-//   } catch (error) {
-//     return next(error);
-//   }
-// };

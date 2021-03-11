@@ -1,4 +1,4 @@
-const { ErrorFactory } = require('../../utils/errorFactory');
+const { ErrorFactory } = require('../../utils/errors/errorFactory');
 
 const saveErrorHandler = (error, doc, next) => {
   if (error.name === 'MongoError' && error.code === 11000) {
@@ -8,10 +8,16 @@ const saveErrorHandler = (error, doc, next) => {
 };
 
 const updateOneErrorHandler = (error, doc, next) => {
-  console.log('post updateOne error hook');
   next(new ErrorFactory(500, `Database error: ${error}`));
 };
 
+const checkNullHandler = (doc, next) => {
+  if (doc === null) {
+    next(new ErrorFactory(400, 'Invalid credentials'));
+  }
+  next();
+};
+
 module.exports = {
-  saveErrorHandler, updateOneErrorHandler,
+  saveErrorHandler, updateOneErrorHandler, checkNullHandler,
 };
