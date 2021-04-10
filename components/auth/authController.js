@@ -14,7 +14,7 @@ const postLogin = async (req, res, next) => {
   if (resObject) {
     res.cookie('refreshToken', resObject.tokens.refreshToken, {
       httpOnly: true,
-      domain: '127.0.0.1:5000',
+      secure: true,
       maxAge: 900000,
     });
     return res.json(new Response(

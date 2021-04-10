@@ -8,8 +8,8 @@ const morgan = require('morgan');
 const { errorHandler, notFoundHandler } = require('../utils/errors/errorHandler');
 
 const app = express();
-if(process.env.NODE_ENV != 'production' ){
-dotenv.config();
+if (process.env.NODE_ENV != 'production') {
+  dotenv.config();
 }
 require('../utils/errors/proc-man')();
 
