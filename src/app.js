@@ -8,7 +8,9 @@ const morgan = require('morgan');
 const { errorHandler, notFoundHandler } = require('../utils/errors/errorHandler');
 
 const app = express();
+if(process.env.NODE_ENV != 'production' ){
 dotenv.config();
+}
 require('../utils/errors/proc-man')();
 
 const { apiRouter } = require('../components/api');
