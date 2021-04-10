@@ -25,9 +25,8 @@ const corsOptions = {
   allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
   credentials: true,
 };
-app.options('*', cors(corsOptions));
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
