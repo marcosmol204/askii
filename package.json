@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --fix"
+    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --fix",
+    "start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "author": "Marcos Molina",
   "license": "MIT",
@@ -33,6 +34,6 @@
     "nodemon": "^2.0.6"
   },
   "engines": {
-    "node": ">=8.10.0"
+    "node": "15.x"
   }
 }
