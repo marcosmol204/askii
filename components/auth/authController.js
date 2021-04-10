@@ -15,7 +15,6 @@ const postLogin = async (req, res, next) => {
     res.cookie('refreshToken', resObject.tokens.refreshToken, {
       httpOnly: true,
       secure: true,
-      maxAge: 900000,
     });
     return res.json(new Response(
       {
