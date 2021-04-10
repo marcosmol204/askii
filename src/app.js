@@ -20,13 +20,15 @@ app.use(morgan('dev'));
 app.use(pino);
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
-  methods: ['GET', 'POST', 'DELETE'],
-  allowHeaders: ['Content-Type', 'credentials'],
+  origin: ['http://localhost:3000','http://172.30.192.1:3000'],
+  methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
+  allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
   credentials: true,
 };
+app.options('*', cors(corsOptions));
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
 app.use(cookieParser());
 
 app.use(express.json());
