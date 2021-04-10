@@ -1,5 +1,6 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
+const { ErrorFactory } = require('../../utils/errors/ApiError');
 
 const { Schema } = mongoose;
 const {
@@ -9,7 +10,7 @@ const {
 } = require('../globalConfigs');
 
 const {
-  requiredQuestionStatus,
+  questionStatus,
   requiredQuestionType,
   questionStatusEnum,
 } = require('./questionConfigs');
@@ -22,8 +23,8 @@ const QuestionSchema = new Schema({
   description: String,
   expirationTime: requiredNumber,
   isAnonymous: requiredBool,
-  status: { ...requiredQuestionStatus },
-  type: { ...requiredQuestionType, default: questionStatusEnum.ACTIVE },
+  status: { ...questionStatus, default: questionStatusEnum.ACTIVE },
+  type: { ...requiredQuestionType },
   tags: { type: [String], ref: 'user', default: [] },
 });
 
@@ -32,6 +33,18 @@ QuestionSchema.virtual('isExpired').get(function () {
 });
 
 QuestionSchema.post('save', saveErrorHandler);
+
+QuestionSchema.pre('findOne', async function (next) {
+  if (this.status === questionStatusEnum.EXPIRED) {
+    next(new ErrorFactory(400, 'The question is expired'));
+  }
+  if (this.isExpired && this.status === questionStatusEnum.ACTIVE) {
+    this.status = questionStatusEnum.EXPIRED;
+    await this.save();
+    next(new ErrorFactory(400, 'The question is expired'));
+  }
+  next();
+});
 
 const Question = mongoose.model('question', QuestionSchema);
 

@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { ErrorFactory } = require('../../../utils/errors/ApiError');
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -10,14 +11,26 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = async (dest, subject, text) => {
+/**
+ * @param {String} dest email destination
+ * @param {String} subject email subject
+ * @param {String} html html template
+ * @returns {SentMessageInfo} info object
+ * @throws nodemailer errors
+ */
+const sendMail = async (dest, subject, html) => {
   const mailOptions = {
-    from: process.env.GMAIL_ACCOUNT,
+    from: 'appdev204a@gmail.com',
     to: dest,
     subject,
-    text,
+    html,
   };
-  return transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return info;
+  } catch (error) {
+    throw new ErrorFactory(500, error.message);
+  }
 };
 
 module.exports = { sendMail };

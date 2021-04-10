@@ -1,17 +1,17 @@
 const bcrypt = require('bcrypt');
-const { ErrorFactory } = require('../../../utils/errors/errorFactory');
+const { ErrorFactory } = require('../../../utils/errors/ApiError');
 
 /**
-  * @type function
-  * @desc compare an hashed password and a password
-  * @param number role (see roleEnum)
-  * @return null
-  * @errors crypt errors
-*/
-
-const comparePassword = async (user, password) => {
+ * @type async function
+ * @desc compare a hashed password and an unhashed password
+ * @param {String} password input password
+ * @param {String} storedPassword user hashed password
+ * @returns {boolean} true if the passwords match
+ * @throws bcrypt errors
+ */
+const comparePassword = async (password, storedPassword) => {
   try {
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, storedPassword);
     return match;
   } catch (error) {
     throw new ErrorFactory(500, error.message);
@@ -19,11 +19,11 @@ const comparePassword = async (user, password) => {
 };
 
 /**
-  * @type function
+  * @type async function
   * @desc hash a string
-  * @param string password
-  * @return hashed string
-  * @errors crypt errors
+  * @param {String} password string to be hashed
+  * @return {String} hashed string
+  * @errors bcrypt errors
 */
 
 const hashPassword = async (password) => {

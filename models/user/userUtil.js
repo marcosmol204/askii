@@ -1,19 +1,18 @@
-const { ErrorFactory } = require('../../utils/errors/errorFactory');
+const { ApiError } = require('../../utils/errors/ApiError');
 
 const saveErrorHandler = (error, doc, next) => {
   if (error.name === 'MongoError' && error.code === 11000) {
-    const duplicatedKeys = Object.keys(error.keyPattern);
-    next(new ErrorFactory(400, `${duplicatedKeys} is registered`));
+    next(new ApiError(10));
   }
 };
 
 const updateOneErrorHandler = (error, doc, next) => {
-  next(new ErrorFactory(500, `Database error: ${error}`));
+  next(new ApiError(0, 500));
 };
 
 const checkNullHandler = (doc, next) => {
   if (doc === null) {
-    next(new ErrorFactory(400, 'Invalid credentials'));
+    next(new ApiError(11));
   }
   next();
 };

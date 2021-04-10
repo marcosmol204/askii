@@ -1,3 +1,11 @@
+/**
+ * Authentication bussines logic layer
+ *  Dependencies:
+ *    Authentication controller layer
+ *    Express api
+ *    Validation Chains arrays
+ *    Express validator  api
+ */
 const { Router } = require('express');
 const {
   validate,
@@ -36,7 +44,6 @@ router.post('/refresh-token',
 
 // As a user I can logout
 router.delete('/log-out',
-  validate(headerRefreshToken),
   deleteLogout);
 
 // As a user I can generate new password

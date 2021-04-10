@@ -1,23 +1,25 @@
 const { body, header } = require('express-validator');
 
 const bodyNewUser = [
-  body('email').exists().withMessage('parameter:email is required'),
-  body('email').isEmail().withMessage('parameter:email is not valid'),
-  body('password').isLength({ min: 6, max: 12 }).withMessage('parameter:password should contain between 6-12 characters'),
-  body('firstName').exists({ checkFalsy: true }).withMessage('parameter:firstName is required'),
-  body('lastName').exists({ checkFalsy: true }).withMessage('parameter:lastName is required'),
+  body('email').exists().withMessage(13),
+  body('email').isEmail().withMessage(15),
+  body('password').isLength({ min: 6, max: 12 }).withMessage(16),
+  body('firstName').exists({ checkFalsy: true }).withMessage(17),
+  body('lastName').exists({ checkFalsy: true }).withMessage(18),
 ];
 
 const bodyLogin = [
-  body('email').exists({ checkFalsy: true }).withMessage('parameter:email is required'),
-  body('password').exists().withMessage('parameter:password is requiered'),
+  body('email').exists({ checkFalsy: true }).withMessage(13),
+  body('email').isEmail().withMessage(15),
+  body('password').exists().withMessage(14),
 ];
 
 const headerRefreshToken = [
-  header('x-refresh-token').isJWT().withMessage('Valid JWT is requiered'),
+  header('x-access-token').exists().withMessage(21),
+  header('x-access-token').isJWT().withMessage(19),
 ];
 
-const bodyEmail = [body('email').exists().withMessage('Email is required')];
+const bodyEmail = [body('email').exists().withMessage(13)];
 
 module.exports = {
   bodyNewUser,

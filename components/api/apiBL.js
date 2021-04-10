@@ -1,44 +1,87 @@
+/* eslint-disable max-len */
+/**
+ * Api bussines logic layer
+ *  Dependencies:
+ *    Api data access layer
+ *    Bcrypt api
+ *    ErrorFactory
+ *    Question configs
+ */
 const {
-  readQuestion, createQuestion, readAnswers, createAnswer, readAnswer, readQuestions,
+  readQuestion,
+  createQuestion,
+  readAnswers,
+  createAnswer,
+  readAnswer,
+  readQuestions,
 } = require('./apiDA');
+const { ErrorFactory } = require('../../utils/errors/ApiError');
+const { questionStatusEnum } = require('../../models/question/questionConfigs');
 
-const { ErrorFactory } = require('../../utils/errors/errorFactory');
-const {
-  questionStatusEnum,
-  questionTypeEnum,
-} = require('../../models/question/questionConfigs');
-
-const recordQuestion = async (schema) => {
+/**
+ * @desc async function that handles creating question logic POST /question
+ * @param {Object} questionSchema object with the follow properties
+ * @param {Number} questionSchema.askedAt unix date that represent when the question was asked
+ * @param {String|null} questionSchema.askedBy ObjectId as string that represent who asked the question
+ * @param {String} questionSchema.question what the question is
+ * @param {String} questionSchema.description for extra information
+ * @param {Number} questionSchema.expirationTime unix date represent when the question get expired
+ * @param {Bolean} questionSchema.isAnonymous if true, no info about askedBy will be provided
+ * @param {Enum} questionSchema.type check question type enum
+ * @param {String[]} questionSchema.tags divide to
+ * @returns {Document} new question document
+ * @throws mongoose errors
+ */
+const recordQuestion = async (questionSchema) => {
   const status = questionStatusEnum.ACTIVE;
-  const questionDoc = createQuestion({ status, ...schema });
+  const questionDoc = createQuestion({ status, ...questionSchema });
   return questionDoc.save();
 };
 
+/**
+ * @desc async function that handles deleting question logic DELETE question/{id}
+ * @param {String} questionId ObjectId as string
+ * @param {String} deletedBy ObjectId as string
+ * @returns {Promise<this>} delated document
+ * @throws 403 - 'No permitions to delete this question'
+ */
 const removeQuestion = async (questionId, deletedBy) => {
   const cond = { _id: questionId };
   const questionDoc = await readQuestion(cond);
   if (questionDoc.askedBy.toString() !== deletedBy) {
-    throw (new ErrorFactory(403, 'Attempt to delete a question not asked by the applicant'));
+    throw (new ErrorFactory(403, 'No permitions to delete this question'));
   }
   return questionDoc.remove();
 };
 
-const queryQuestion = async (id) => {
-  const cond = { _id: id };
-  const opts = {};
-  const proj = {};
-  const questionDoc = await readQuestion(cond, proj, opts);
-  questionDoc.askedBy = questionDoc.isAnonymous === true ? null : questionDoc.askedBy;
+/**
+ * @desc async function that handles querying logic POST /login
+ * @param {String} questionId ObjectId as string
+ * @returns {Document} requested document
+ * @throws mongoose errors
+ */
+const queryQuestion = async (questionId) => {
+  const cond = { _id: questionId };
+  const questionDoc = await readQuestion(cond);
+  const documentCopy = { ...questionDoc };
+  documentCopy.askedBy = documentCopy.isAnonymous === true ? null : questionDoc.askedBy;
   return questionDoc;
 };
-
+/**
+ * @param {String} id question ObjectId
+ * @returns {Document[]} collection of asnwers
+ */
 const queryQuestionAnswers = async (id) => {
   const cond = { questionId: id };
   const opts = { populate: { path: 'answeredBy', select: 'firstName lastName -_id' } };
   const proj = {};
   const answerCollection = await readAnswers(cond, proj, opts);
-  answerCollection.forEach((ans) => ans.answeredBy = ans.isAnonymous === true ? null : ans.answeredBy);
-  return answerCollection;
+  const processedCollection = answerCollection.map((ans) => {
+    const answerCopy = { ...ans };
+    answerCopy.answeredBy = ans.isAnonymous === true ? null : ans.answeredBy;
+    return answerCopy;
+  });
+  return processedCollection;
 };
 
 const queryAnswers = async (id) => {
@@ -48,9 +91,20 @@ const queryAnswers = async (id) => {
   const answersQuery = await readAnswers(cond, proj, opts);
   return answersQuery;
 };
-
-const recordAnswer = async (schema) => {
-  const answerDoc = createAnswer(schema);
+/**
+ * @param {Object} answerSchema
+ * @param {String} answerSchema.questionId question to be answered id
+ * @param {String|Boolean|Number} answerSchema.answer answer for the question
+ * @param {Number} answerSchema.answeredAt unix date when the question whas answered
+ * @returns {Document} new answer document
+ */
+const recordAnswer = async (answerSchema) => {
+  const { questionId, answeredBy } = answerSchema;
+  let answerDoc = await readAnswer({ questionId, answeredBy });
+  if (answerDoc) {
+    throw new ErrorFactory(400, 'The question can only be answered once');
+  }
+  answerDoc = createAnswer(answerSchema);
   return answerDoc.save();
 };
 

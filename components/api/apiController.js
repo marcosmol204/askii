@@ -1,29 +1,27 @@
 const {
-  recordQuestion,
-  removeQuestion,
-  queryQuestion,
-  queryQuestionAnswers,
-  recordAnswer,
-  removeAnswer,
-  queryQuestions,
-  queryAnswers,
+  recordQuestion, removeQuestion,
+  queryQuestion, queryQuestionAnswers,
+  recordAnswer, removeAnswer,
+  queryQuestions, queryAnswers,
 } = require('./apiBL');
 
+const Response = require('../../utils/Response');
+
 const postQuestion = async (req, res, next) => {
-  const schema = req.body;
+  const questionSchema = req.body;
   const askedBy = req.sub;
-  try {
-    const question = await recordQuestion({ askedBy, ...schema });
-    res.json({
-      status: '200',
-      message: 'The question was successfully created',
-      responseTime: new Date(),
-      data: {
+
+  const question = await recordQuestion({ askedBy, ...questionSchema })
+    .catch((error) => next(error));
+
+  if (question) {
+    res.json(new Response(
+      {
         questionId: question._id,
+        status: 200,
+        message: 'The question was successfully created',
       },
-    });
-  } catch (error) {
-    next(error);
+    ));
   }
 };
 
@@ -34,7 +32,7 @@ const deleteQuestion = async (req, res, next) => {
     const question = await removeQuestion(questionId, deletedBy);
     res.json({
       status: '200',
-      message: 'The question was successfully created',
+      message: 'The question was successfully deleted',
       responseTime: new Date(),
       data: {
         questionId: question._id,

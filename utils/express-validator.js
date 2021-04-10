@@ -1,21 +1,6 @@
 const { validationResult } = require('express-validator');
+const { ApiError } = require('./errors/ApiError');
 
-// const validate = (validations) => async (req, res, next) => {
-//   await Promise.all(validations.map((validation) => validation.run(req)));
-
-//   const validationArray = validationResult(req);
-//   if (validationArray.isEmpty()) {
-//     return next();
-//   }
-//   return res.status(400).json({
-//     error:
-//         {
-//           status: 400,
-//           message: 'Bad Request',
-//           errors: validationArray.array(),
-//         },
-//   });
-// };
 const validate = (validations) => async (req, res, next) => {
   for (const validation of validations) {
     const result = await validation.run(req);
@@ -26,9 +11,10 @@ const validate = (validations) => async (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-
-  res.status(400).json({ errors: errors.array() });
+  const errorCode = errors.array()[0].msg;
+  return next(new ApiError(errorCode));
 };
+
 module.exports = {
   validate,
 };

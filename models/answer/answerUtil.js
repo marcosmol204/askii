@@ -1,37 +1,14 @@
-const mongoose = require('mongoose');
-const { ErrorFactory } = require('../../utils/errors/errorFactory');
+const { ErrorFactory } = require('../../utils/errors/ApiError');
+const Question = require('../question/questionModel');
 
-const validateType = (type, answer) => {
-  if (type === 0 && typeof answer !== 'boolean') {
-    throw new ErrorFactory(400, 'answer must be a boolean');
+const validateType = async function (next) {
+  const questionDocument = await Question.findById(this.questionId);
+  // eslint-disable-next-line valid-typeof
+  if (typeof this.answer !== questionDocument.type) {
+    next(new ErrorFactory(400, `The answer must be ${questionDocument.type}`));
   }
-  if (type === 1 && typeof answer !== 'number') {
-    throw new ErrorFactory(400, 'answer must be a number');
-  }
-  if (type === 2 && typeof answer !== 'string') {
-    throw new ErrorFactory(400, 'answer must be a string');
-  }
+  next();
 };
-
-const validateDate = (askedAt, expirationDate) => {
-  if (askedAt >= expirationDate) {
-    throw new ErrorFactory(400, 'answers time is over');
-  }
-};
-
-const validateQuestion = (doc) => {
-  if (!doc) {
-    throw new ErrorFactory(400, 'Invalid question id');
-  }
-};
-
-const validateOneAnswer = (answeredBy, id) => {
-  if (answeredBy.includes(id)) {
-    throw new ErrorFactory(400, 'The user has already answered this question');
-  }
-};
-
-const castId = (id) => mongoose.Types.ObjectId(id);
 
 const saveErrorHandler = (error, doc, next) => {
   if ((error.name === 'MongoError' && error.code === 11000)) {
@@ -40,17 +17,7 @@ const saveErrorHandler = (error, doc, next) => {
   }
 };
 
-const removeErrorHandler = (error, doc, next) => {
-  console.log('post remove error hook');
-  next(new ErrorFactory(400, error));
-};
-
 module.exports = {
   validateType,
-  validateDate,
-  validateOneAnswer,
-  validateQuestion,
-  castId,
   saveErrorHandler,
-  removeErrorHandler,
 };

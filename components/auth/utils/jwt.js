@@ -1,16 +1,15 @@
 const jwt = require('jsonwebtoken');
-const { ErrorFactory } = require('../../../utils/errors/errorFactory');
+const { ErrorFactory } = require('../../../utils/errors/ApiError');
 
 const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = process.env;
 
 /**
-  * @type function
+  * @type async function
   * @desc create a token
-  * @param date expiration time ( see jwt documentation )
-  * @param id submiter id
-  * @param role  number role (see roleEnum )
-  * @type access or refesh
-  * @return token
+  * @param {String} date expressed in seconds or a string describing a time span zeit/ms.
+  * @param {String} id submiter id
+  * @param {String} type 'access' or 'refesh'
+  * @return {String} token
   * @errors issue with jwt
 */
 
@@ -29,10 +28,10 @@ const createToken = async (time, id, type) => {
 };
 
 /**
-  * @type function
+  * @type async function
   * @desc decode a jwt token
-  * @param token JWT token
-  * @param string access or refesh
+  * @param {String} token JWT token
+  * @param {String} type 'access' or 'refesh'
   * @return decoded token
   * @errors jwt errors.
 */
@@ -57,14 +56,14 @@ const decodeToken = async (token, type) => {
 /**
   * @type function
   * @desc compare two tokens
-  * @param string JWT token
-  * @param string JWT token
-  * @return decoded token
-  * @errors 401 error.
+  * @param {String} tokenA token
+  * @param {String} tokenB token
+  * @return {Bolean} decoded token
+  * @throw 401 error
 */
 
-const compareToken = (tokenA, tokenb) => {
-  if (tokenA !== tokenb) {
+const compareTokens = (tokenA, tokenB) => {
+  if (tokenA !== tokenB) {
     throw new ErrorFactory(401, 'Invalid refresh token');
   }
 };
@@ -72,5 +71,5 @@ const compareToken = (tokenA, tokenb) => {
 module.exports = {
   createToken,
   decodeToken,
-  compareToken,
+  compareTokens,
 };

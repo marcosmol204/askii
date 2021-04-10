@@ -1,22 +1,29 @@
 const { isRequired } = require('../globalConfigs.js');
 
 const questionStatusEnum = Object.freeze({
-  ACTIVE: 0,
-  EXPIRED: 1,
+  ACTIVE: 'active',
+  EXPIRED: 'expired',
 });
 
 const questionTypeEnum = Object.freeze({
-  BINARY: 0,
-  NUMERIC: 1,
-  TEXT: 2,
+  BOOLEAN: 'boolean',
+  NUMBER: 'number',
+  STRING: 'string',
 });
 
-const requiredQuestionStatus = { type: Number, ...isRequired, enum: Object.values(questionStatusEnum) };
-const requieredQuestionType = { type: Number, ...isRequired, enum: Object.values(questionTypeEnum) };
+const questionStatus = {
+  type: String,
+  enum: Object.values(questionStatusEnum),
+};
+const requiredQuestionType = {
+  type: String,
+  ...isRequired,
+  enum: Object.values(questionTypeEnum),
+};
 
 module.exports = {
-  requiredQuestionStatus,
-  requieredQuestionType,
+  questionStatus,
+  requiredQuestionType,
   questionStatusEnum,
   questionTypeEnum,
 };

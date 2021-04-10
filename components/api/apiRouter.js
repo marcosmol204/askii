@@ -4,39 +4,34 @@ const { questionSchema, answerSchema } = require('./utils/apiValidations');
 
 const {
   postQuestion, deleteQuestion,
-  getQuestion, getQuestionAnswers,
-  postAnswer, deleteAnswer,
-  getQuestions, getAnswers,
+  getQuestion, postAnswer,
+  deleteAnswer, getQuestions,
 } = require('./apiController');
 
 const { authAPI } = require('../auth');
 
 const router = Router();
 
+// Every user can read a question
+router.get('/question/:questionId',
+  getQuestion);
+
+// Every user can answer once a question(also anonymously).
+router.post('/answer',
+  validate(answerSchema),
+  postAnswer);
+
 // Authorization middleware
 router.use(authAPI.authorize());
 
-// As a user I can ask a question (also anonymously).
+// As a registered user I can create a question
 router.post('/question',
   validate(questionSchema),
   postQuestion);
 
-// As a user I can see all the question I asked.
+// As a registered user I can get see all the question I asked [id, title, type]
 router.get('/questions',
   getQuestions);
-
-// As a user I can see all the answers to a question I asked.
-router.get('/answers/question/:questionId',
-  getQuestionAnswers);
-
-// As a user I can see the answer I answered.
-router.get('/answers',
-  getAnswers);
-
-// As a user I can answer once a question(also anonymously).
-router.post('/answer',
-  validate(answerSchema),
-  postAnswer);
 
 // As a user I can delete a question
 router.delete('/question/:questionId',
@@ -46,18 +41,12 @@ router.delete('/question/:questionId',
 router.delete('/answer/:answerId',
   deleteAnswer);
 
-// Read a question
-router.get('/question/:questionId',
-  getQuestion);
-
 module.exports = router;
 
-// // As a user I can edit a question.
-// router.put('/question/:questionId',
-//   validate(questionSchema),
-//   fetchQuestion);
+// // As a user I can see all the answers to a question I asked.
+// router.get('/answers/question/:questionId',
+//   getQuestionAnswers);
 
-// // As a user I can edit an answer
-// router.put('/answer/:answerId',
-//   validate(answerSchema),
-//   putAnswer);
+// As a user I can see the answer I answered.
+// router.get('/answers',
+//   getAnswers);
