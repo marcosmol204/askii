@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules --fix",
-    "start": "pm2 start ecosystem.config.js --env production"
+    "start": "pm2 start ecosystem.config.js --env production",
+    "start-dev" : "pm2 start ecosystem.config.js --env development",
+    "stop" : "pm2 stop ecosystem.config.js"
   },
   "author": "Marcos Molina",
   "license": "MIT",
