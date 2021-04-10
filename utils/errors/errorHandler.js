@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const { ApiError } = require('./ApiError.js');
 const Response = require('../Response');
 
@@ -6,6 +8,7 @@ const isTrustedError = (error) => error.isOperational;
 const crashIfUntrustedErrorOrSendResponse = async (error, res) => {
   if (!isTrustedError(error)) {
     // eslint-disable-next-line no-process-exit
+    await mongoose.connection.close();
     process.exit(1);
   }
   const errorCopy = { ...error };
