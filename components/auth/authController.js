@@ -13,7 +13,6 @@ const postLogin = async (req, res, next) => {
   const resObject = await issueTokens(loginSchema).catch((error) => next(error));
   if (resObject) {
     res.cookie('refreshToken', resObject.tokens.refreshToken, {
-      httpOnly: true,
       maxAge: 30 * 24 * 3600,
       path: '/',
       sameSite: 'None',
