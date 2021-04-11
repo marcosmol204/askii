@@ -19,15 +19,22 @@ const { authRouter } = require('../components/auth');
 app.use(morgan('dev'));
 app.use(pino);
 
-const corsOptions = {
-  origin: ['http://localhost:3000','http://172.30.192.1:3000'],
-  methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
-  allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: ['http://localhost:3000','http://172.30.192.1:3000'],
+//   methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
+//   allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
-
+// app.use(cors(corsOptions));
+app.use((res, req, next) => {
+  res.set('Access-Control-Allow-Origin', req.headers.origin);
+  res.set('Access-Control-Allow-Credentials', 'true');
+  res.set(
+    'Access-Control-Expose-Headers',
+    'date, etag, access-control-allow-origin, access-control-allow-credentials',
+  );
+});
 app.use(cookieParser());
 
 app.use(express.json());

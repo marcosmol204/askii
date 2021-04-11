@@ -12,9 +12,16 @@ const postLogin = async (req, res, next) => {
   const loginSchema = req.body;
   const resObject = await issueTokens(loginSchema).catch((error) => next(error));
   if (resObject) {
+    res.cookie(key, value, {
+      maxAge: thirtyDays,
+      path: '/',
+      sameSite: 'None',
+    });
     res.cookie('refreshToken', resObject.tokens.refreshToken, {
       httpOnly: true,
-      secure: true,
+      maxAge: 30 * 24 * 3600,
+      path: '/',
+      sameSite: 'None',
     });
     return res.json(new Response(
       {
