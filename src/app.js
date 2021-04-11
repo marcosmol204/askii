@@ -27,7 +27,7 @@ app.use(pino);
 // };
 
 // app.use(cors(corsOptions));
-app.use((res, req, next) => {
+app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', req.headers.origin);
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set(
