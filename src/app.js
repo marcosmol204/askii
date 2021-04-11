@@ -34,6 +34,7 @@ app.use((res, req, next) => {
     'Access-Control-Expose-Headers',
     'date, etag, access-control-allow-origin, access-control-allow-credentials',
   );
+  next();
 });
 app.use(cookieParser());
 
