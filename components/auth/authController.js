@@ -26,11 +26,10 @@ const postLogin = async (req, res, next) => {
 };
 
 const postRefreshToken = async (req, res, next) => {
-  const refreshToken = req.header('x-refresh-token');
+  const refreshToken = req.cookies('refreshToken');
   const accessToken = await issueAccessToken(refreshToken).catch((error) => next(error));
   if (accessToken) {
-    res.setHeader('set-cookie', [`accessToken=${accessToken}; httponly; samesite=lax; path=/`]);
-    return res.json(new Response());
+    return res.json(new Response({ accessToken }));
   }
 };
 

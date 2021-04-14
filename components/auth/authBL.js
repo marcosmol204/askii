@@ -64,7 +64,6 @@ const issueTokens = async (loginSchema) => {
  */
 const issueAccessToken = async (refreshToken) => {
   const { sub } = await decodeToken(refreshToken, 'refresh');
-
   const cond = { _id: sub };
   const userDocument = await queryUser(cond);
 
