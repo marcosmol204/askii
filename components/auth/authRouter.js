@@ -13,7 +13,6 @@ const {
 const {
   bodyNewUser,
   bodyLogin,
-  headerRefreshToken,
   bodyEmail,
 } = require('./utils/authValidation');
 
@@ -39,7 +38,6 @@ router.post('/log-in',
 
 // As a user I can refresh my tokens
 router.post('/refresh-token',
-  validate(headerRefreshToken),
   postRefreshToken);
 
 // As a user I can logout
