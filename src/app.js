@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', req.headers.origin);
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials,x-access-token');
   next();
 });
 app.use(cookieParser());
