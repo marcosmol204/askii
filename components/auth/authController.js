@@ -16,6 +16,7 @@ const postLogin = async (req, res, next) => {
       maxAge: 30 * 24 * 3600,
       path: '/',
       httpOnly: true,
+      sameSite: 'none',
     });
     return res.json(new Response(
       {

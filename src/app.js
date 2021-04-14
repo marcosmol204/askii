@@ -34,17 +34,13 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cookieParser());
-
-app.use(express.json());
-app.use(helmet());
-
 app.use((req, res, next) => {
-  const { refreshToken } = req.cookies;
-  console.log('refreshToken:', refreshToken);
-  const { accessToken } = req.body;
-  console.log('accessToken:', accessToken);
+  console.log('cookies:', req.cookies);
+  console.log('x-access-token', req.headers('x-access-token'));
   next();
 });
+app.use(express.json());
+app.use(helmet());
 
 app.use('/auth', authRouter);
 app.use('/api/v1', apiRouter);
