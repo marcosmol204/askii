@@ -8,7 +8,7 @@ const { decodeToken } = require('./utils/jwt');
 */
 const authorize = () => async (req, res, next) => {
   try {
-    const { accessToken } = req.cookies;
+    const { accessToken } = req.headers;
     const decodedToken = await decodeToken(accessToken, 'access');
     req.sub = decodedToken.sub;
     return next();

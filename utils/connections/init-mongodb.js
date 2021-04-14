@@ -32,4 +32,8 @@ module.exports = () => {
     // eslint-disable-next-line no-process-exit
     process.exit(0);
   });
+  process.on('exit', async () => {
+    await mongoose.connection.close();
+    // eslint-disable-next-line no-process-exit
+  });
 };

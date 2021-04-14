@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-// const cors = require('cors');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const pino = require('pino-http')();
@@ -18,21 +18,21 @@ const { authRouter } = require('../components/auth');
 
 app.use(pino);
 
-// const corsOptions = {
-//   origin: ['http://localhost:3000','http://172.30.192.1:3000'],
-//   methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
-//   allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
-//   credentials: true,
-// };
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://172.30.192.1:3000'],
+  methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
+  allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
+  credentials: true,
+};
 
-// app.use(cors(corsOptions));
-app.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', req.headers.origin);
-  res.set('Access-Control-Allow-Credentials', 'true');
-  res.set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials');
-  next();
-});
+app.use(cors(corsOptions));
+// app.use((req, res, next) => {
+//   res.set('Access-Control-Allow-Origin', req.headers.origin);
+//   res.set('Access-Control-Allow-Credentials', 'true');
+//   res.set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials');
+//   next();
+// });
 app.use(cookieParser());
 
 app.use(express.json());
