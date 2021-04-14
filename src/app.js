@@ -18,21 +18,21 @@ const { authRouter } = require('../components/auth');
 
 app.use(pino);
 
-const corsOptions = {
-  origin: true,
-  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'x-access-token'],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: true,
+//   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+//   allowHeaders: ['Content-Type', 'x-access-token'],
+//   credentials: true,
+// };
 
 app.use(cors(corsOptions));
-// app.use((req, res, next) => {
-//   res.set('Access-Control-Allow-Origin', req.headers.origin);
-//   res.set('Access-Control-Allow-Credentials', 'true');
-//   res.set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials');
-//   next();
-// });
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', req.headers.origin);
+  res.set('Access-Control-Allow-Credentials', 'true');
+  res.set('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, mode, Access-Control-Allow-Credentials');
+  next();
+});
 app.use(cookieParser());
 
 app.use(express.json());
@@ -41,7 +41,7 @@ app.use(helmet());
 app.use((req, res, next) => {
   const { refreshToken } = req.cookies;
   console.log('refreshToken:', refreshToken);
-  const { accessToken } = req.body;
+  const accessToken = req.headers('x-access-token');
   console.log('accessToken:', accessToken);
   next();
 });
