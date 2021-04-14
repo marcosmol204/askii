@@ -19,7 +19,7 @@ const { authRouter } = require('../components/auth');
 app.use(pino);
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://172.30.192.1:3000'],
+  origin: ['http://localhost:3000', 'http://172.30.192.1:3000', 'htpp://myapp.local'],
   methods: 'GET,HEAD,POST,PATCH,DELETE,OPTIONS',
   allowHeaders: ['Content-Type', 'X-Requested-With', 'x-access-token'],
   credentials: true,
